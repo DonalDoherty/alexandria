@@ -92,3 +92,15 @@ VALUES (
         WHERE description = 'Unread'
     )
 );
+
+-- Creating registration key table to limit registrations
+
+CREATE TABLE IF NOT EXISTS gutenberg_common.registration_key (
+    registration_key_uid SERIAL PRIMARY KEY,
+    key_code TEXT NOT NULL,
+    used BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE gutenberg_common.registration_key
+ADD CONSTRAINT registration_key_code_unique UNIQUE (key_code);
