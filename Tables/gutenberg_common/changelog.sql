@@ -138,3 +138,5 @@ ADD CONSTRAINT reading_list_matrix_reading_list_id_fkey FOREIGN KEY (reading_lis
 REFERENCES gutenberg_common.reading_list(reading_list_uid)
 ON DELETE CASCADE;
 
+ALTER TABLE gutenberg_common.reading_list_matrix
+ADD CONSTRAINT reading_list_matrix_book_id_reading_list_id_unique UNIQUE (book_id, reading_list_id);
