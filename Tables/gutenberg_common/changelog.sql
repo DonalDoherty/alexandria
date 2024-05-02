@@ -104,3 +104,37 @@ CREATE TABLE IF NOT EXISTS gutenberg_common.registration_key (
 
 ALTER TABLE gutenberg_common.registration_key
 ADD CONSTRAINT registration_key_code_unique UNIQUE (key_code);
+
+ALTER TABLE gutenberg_common.book 
+ADD CONSTRAINT book_isbn_not_null 
+CHECK (isbn13 IS NOT NULL OR isbn10 IS NOT NULL);
+
+ALTER TABLE gutenberg_common.book 
+ALTER COLUMN title SET NOT NULL,
+ALTER COLUMN author SET NOT NULL;
+
+--Setting cascade rules for foreign keys
+ALTER TABLE gutenberg_common.reading_list
+DROP CONSTRAINT IF EXISTS reading_list_user_id_fkey;
+
+ALTER TABLE gutenberg_common.reading_list_matrix 
+ADD CONSTRAINT reading_list_user_id_fkey FOREIGN KEY (user_id) 
+REFERENCES gutenberg_common.user(user_uid)
+ON DELETE CASCADE;
+
+ALTER TABLE gutenberg_common.reading_list_matrix
+DROP CONSTRAINT IF EXISTS reading_list_matrix_book_id_fkey;
+
+ALTER TABLE gutenberg_common.reading_list_matrix
+DROP CONSTRAINT IF EXISTS reading_list_matrix_reading_list_id_fkey;
+
+ALTER TABLE gutenberg_common.reading_list_matrix 
+ADD CONSTRAINT reading_list_matrix_book_id_fkey FOREIGN KEY (book_id) 
+REFERENCES gutenberg_common.book(book_uid)
+ON DELETE CASCADE;
+
+ALTER TABLE gutenberg_common.reading_list_matrix 
+ADD CONSTRAINT reading_list_matrix_reading_list_id_fkey FOREIGN KEY (reading_list_id) 
+REFERENCES gutenberg_common.reading_list(reading_list_uid)
+ON DELETE CASCADE;
+
